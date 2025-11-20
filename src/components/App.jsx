@@ -1,6 +1,16 @@
 import "../styles/App.scss";
+// import {useState} from 'react';
 
 function App() {
+//Variables de estado 
+
+// const [dice, setDice] = useState(0);
+// const [cookies, setCookies] = useState([1,2,3]);
+// const [eggs, setEggs] = useState([1,2,3]);
+// const [frogs, setFrogs] = useState([1,2,3]);
+// const [groguPosition, setGroguPosition]= useState(0);
+// const [statusGame, setStatusGame]=useState('Game in progress');
+
   return (
     <div>
       <body className="page">
