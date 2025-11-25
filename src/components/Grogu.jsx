@@ -1,7 +1,6 @@
 function Grogu() {
 return (
 <div className="grogu">👣</div>
-
 )
 }
 

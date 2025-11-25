@@ -6,20 +6,49 @@ import Board from "./Board";
 function App() {
   //Variables de estado
 
-  const [dice, setDice] = useState(0);
+  
   const [groguPosition, setGroguPosition] = useState(0);
-  const [goods, setGoods] = useState(["goodsOne", "goodsTwo", "goodsTree"]);
+  const [goods, setGoods] = useState(
+    {
+      cookies: 3,
+      eggs: 3,
+      frogs: 3,
+    }
+  );
   // const [statusGame, setStatusGame]=useState('Game in progress');
 
   const rollDice = () => {
     const randomNumber = Math.floor(Math.random() * 4) + 1;
-  };
-
-  if (diceRoll === 4) {
+    if (randomNumber === 4) {
     const newPosition = groguPosition + 1;
     // ... actualiza la posición y verifica la victoria ...
     setGroguPosition(newPosition);
-  } else {
+  } 
+  if (randomNumber=== 1 && goods.eggs > 0) {
+
+    const eggsLeft = goods.eggs-1;
+
+    setGoods({
+      cookies: goods.cookies,
+      eggs: eggsLeft,
+      frogs: goods.frogs
+    });
+    }
+
+  }
+  if (randomNumber=== 1) {
+
+    const eggsLeft = goods.eggs-1;
+
+    setGoods({
+      cookies: goods.cookies,
+      eggs: eggsLeft,
+      frogs: goods.frogs
+    })
+  }
+  
+  
+  else {
     // Se quita una mercancía si hay alguna
     if (goods.length > 0) {
       const removed = goods[0];
@@ -31,6 +60,9 @@ function App() {
       console.log("No había mercancías para descargar");
     }
   }
+  };
+
+  
 
   return (
     <div>
