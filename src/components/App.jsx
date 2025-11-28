@@ -1,102 +1,118 @@
 import "../styles/App.scss";
-// import {useState} from 'react';
+import { useState } from "react";
 import Header from "./Header";
 import Board from "./Board";
 
 function App() {
-  //Variables de estado
-
-  
+  // Variables de estado
+  const [diceNumber, setDiceNumber] = useState(0);
   const [groguPosition, setGroguPosition] = useState(0);
-  const [goods, setGoods] = useState(
-    {
-      cookies: 3,
-      eggs: 3,
-      frogs: 3,
-    }
-  );
-  // const [statusGame, setStatusGame]=useState('Game in progress');
 
+  const [goods, setGoods] = useState({
+    cookies: 3,
+    eggs: 3,
+    frogs: 3,
+  });
+
+  const [statusGame, setStatusGame] = useState("Game in progress");
+  const [message, setMessage] = useState("");
+
+  // --- Función para tirar el dado ---
   const rollDice = () => {
     const randomNumber = Math.floor(Math.random() * 4) + 1;
+    setDiceNumber(randomNumber);
+
+    // Número 4 → Grogu avanza
     if (randomNumber === 4) {
-    const newPosition = groguPosition + 1;
-    // ... actualiza la posición y verifica la victoria ...
-    setGroguPosition(newPosition);
-  } 
-  if (randomNumber=== 1 && goods.eggs > 0) {
+      const newPosition = groguPosition + 1;
+      setGroguPosition(newPosition);
 
-    const eggsLeft = goods.eggs-1;
+      if (newPosition >= 10) {
+        setStatusGame("Grogu ha ganado 🎉");
+      }
 
-    setGoods({
-      cookies: goods.cookies,
-      eggs: eggsLeft,
-      frogs: goods.frogs
-    });
+      setMessage("Grogu avanza una casilla");
+      return;
     }
 
-  }
-  if (randomNumber=== 1) {
-
-    const eggsLeft = goods.eggs-1;
-
-    setGoods({
-      cookies: goods.cookies,
-      eggs: eggsLeft,
-      frogs: goods.frogs
-    })
-  }
-  
-  
-  else {
-    // Se quita una mercancía si hay alguna
-    if (goods.length > 0) {
-      const removed = goods[0];
-      setGoods((prev) => prev.slice(1)); // Quitar primera mercancía
-      setMessage(`Se ha descargado una mercancía: ${removed}`);
-      console.log("Mercancía descargada:", removed);
-    } else {
-      setMessage("No hay más mercancías para descargar.");
-      console.log("No había mercancías para descargar");
+    // Número 1 → Quita un huevo si quedan
+    if (randomNumber === 1 && goods.eggs > 0) {
+      setGoods({ ...goods, eggs: goods.eggs - 1 });
+      setMessage("Grogu se ha comido un huevo 🥚");
+      return;
     }
-  }
+
+    // Otros números → Se descarga mercancía (si queda)
+    const totalGoods = goods.cookies + goods.eggs + goods.frogs;
+
+    if (totalGoods === 0) {
+      setMessage("No hay más mercancías que descargar");
+      return;
+    }
+
+    // Orden de descarga: cookies → eggs → frogs
+    if (goods.cookies > 0) {
+      setGoods({ ...goods, cookies: goods.cookies - 1 });
+      setMessage("Se ha descargado una cookie 🍪");
+    } else if (goods.eggs > 0) {
+      setGoods({ ...goods, eggs: goods.eggs - 1 });
+      setMessage("Se ha descargado un huevo 🥚");
+    } else if (goods.frogs > 0) {
+      setGoods({ ...goods, frogs: goods.frogs - 1 });
+      setMessage("Se ha descargado una rana 🐸");
+    }
   };
 
-  
+  // --- Reiniciar juego ---
+  const restartGame = () => {
+    setDiceNumber(0);
+    setGroguPosition(0);
+    setGoods({ cookies: 3, eggs: 3, frogs: 3 });
+    setStatusGame("Game in progress");
+    setMessage("");
+  };
 
   return (
-    <div>
-      <body className="page">
-        <Header />
-        <main className="page">
-          <Board />
-          <section>
-            <button className="dice" onClick={rollDice}>
-              Lanzar Dado
-            </button>
-            <div className="game-status">En curso</div>
-          </section>
+    <div className="page">
+      <Header />
+      <main className="page">
+        
+        <Board position={groguPosition} />
 
-          <section className="goods-container">
-            <div className="goods-item">🍪</div>
-            <div className="goods-item">🍪</div>
-            <div className="goods-item">🍪</div>
-          </section>
-          <section className="goods-container">
-            <div className="goods-item">🥚</div>
-            <div className="goods-item">🥚</div>
-            <div className="goods-item">🥚</div>
-          </section>
-          <section className="goods-container">
-            <div className="goods-item">🐸</div>
-            <div className="goods-item">🐸</div>
-            <div className="goods-item">🐸</div>
-          </section>
-          <section>
-            <button className="restart-button">Reiniciar Juego</button>
-          </section>
-        </main>
-      </body>
+        <section>
+          <button className="dice" onClick={rollDice}>
+            Lanzar Dado
+          </button>
+          <div className="game-status">{statusGame}</div>
+          <div className="message">{message}</div>
+          <div className="dice-number">Dado: {diceNumber}</div>
+        </section>
+
+        {/* MERCANCÍAS DINÁMICAS */}
+        <section className="goods-container">
+          {[...Array(goods.cookies)].map((_, i) => (
+            <div key={i} className="goods-item">🍪</div>
+          ))}
+        </section>
+
+        <section className="goods-container">
+          {[...Array(goods.eggs)].map((_, i) => (
+            <div key={i} className="goods-item">🥚</div>
+          ))}
+        </section>
+
+        <section className="goods-container">
+          {[...Array(goods.frogs)].map((_, i) => (
+            <div key={i} className="goods-item">🐸</div>
+          ))}
+        </section>
+
+        <section>
+          <button className="restart-button" onClick={restartGame}>
+            Reiniciar Juego
+          </button>
+        </section>
+      </main>
     </div>
   );
 }
