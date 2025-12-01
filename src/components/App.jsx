@@ -18,16 +18,18 @@ function App() {
   const [message, setMessage] = useState("");
 
   // --- Función para tirar el dado ---
+  console.log ("Holis")
   const rollDice = () => {
     const randomNumber = Math.floor(Math.random() * 4) + 1;
     setDiceNumber(randomNumber);
+    console.log(randomNumber)
 
     // Número 4 → Grogu avanza
     if (randomNumber === 4) {
       const newPosition = groguPosition + 1;
       setGroguPosition(newPosition);
 
-      if (newPosition >= 10) {
+      if (newPosition >= 6) {
         setStatusGame("Grogu ha ganado 🎉");
       }
 
@@ -39,6 +41,18 @@ function App() {
     if (randomNumber === 1 && goods.eggs > 0) {
       setGoods({ ...goods, eggs: goods.eggs - 1 });
       setMessage("Grogu se ha comido un huevo 🥚");
+      return;
+    }
+
+    else if(randomNumber === 2 && goods.cookies > 0) {
+      setGoods({ ...goods, cookies: goods.cookies - 1 });
+      setMessage("Grogu se ha comido una galleta 🍪");
+      return;
+    }
+
+      else if (randomNumber === 3 && goods.frogs > 0) {
+      setGoods({ ...goods, frogs: goods.frogs - 1 });
+      setMessage("Grogu se ha comido una rana 🐸");
       return;
     }
 
