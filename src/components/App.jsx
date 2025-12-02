@@ -86,11 +86,7 @@ function App() {
     // Otros números → Se descarga mercancía (si queda)
     const totalGoods = goods.cookies + goods.eggs + goods.frogs;
 
-    if (totalGoods === 0) {
-      setMessage("No hay más mercancías que descargar");
-      setStatusGame("No quedan mercancías - Fin del juego");
-      return;
-    }
+    
 
     // Orden de descarga: cookies → eggs → frogs
     if (goods.cookies > 0) {
@@ -98,22 +94,28 @@ function App() {
       setGoods(newGoods);
       setMessage("Se ha descargado una cookie 🍪");
       if (newGoods.cookies + newGoods.eggs + newGoods.frogs === 0) {
-        setStatusGame("No quedan mercancías - Fin del juego");
+        setStatusGame("No quedan mercancías - Has ganado");
       }
     } else if (goods.eggs > 0) {
       const newGoods = { ...goods, eggs: goods.eggs - 1 };
       setGoods(newGoods);
       setMessage("Se ha descargado un huevo 🥚");
       if (newGoods.cookies + newGoods.eggs + newGoods.frogs === 0) {
-        setStatusGame("No quedan mercancías - Fin del juego");
+        setStatusGame("No quedan mercancías - Has ganado");
       }
     } else if (goods.frogs > 0) {
       const newGoods = { ...goods, frogs: goods.frogs - 1 };
       setGoods(newGoods);
       setMessage("Se ha descargado una rana 🐸");
       if (newGoods.cookies + newGoods.eggs + newGoods.frogs === 0) {
-        setStatusGame("No quedan mercancías - Fin del juego");
+        setStatusGame("No quedan mercancías - Has ganado");
       }
+    }
+
+    if (totalGoods === 0) {
+      setMessage("No hay más mercancías que descargar. Has ganado");
+      setStatusGame("No quedan mercancías - Has ganado");
+      return;
     }
   };
 
