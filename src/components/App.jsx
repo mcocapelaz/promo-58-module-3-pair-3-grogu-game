@@ -37,24 +37,25 @@ function App() {
       return;
     }
 
-    // Número 1 → Quita un huevo si quedan
-    if (randomNumber === 1 && goods.eggs > 0) {
-      setGoods({ ...goods, eggs: goods.eggs - 1 });
-      setMessage("Grogu se ha comido un huevo 🥚");
-      return;
-    }
+   // Número 1 → Quita un huevo si quedan
+if (randomNumber === 1 && goods.eggs > 0) {
+  setGoods({ ...goods, eggs: goods.eggs - 1 });
+  setMessage("Grogu se ha comido un huevo 🥚");
+  return;
+}
 
-    else if(randomNumber === 2 && goods.cookies > 0) {
-      setGoods({ ...goods, cookies: goods.cookies - 1 });
-      setMessage("Grogu se ha comido una galleta 🍪");
-      return;
-    }
+if (randomNumber === 2 && goods.cookies > 0) {
+  setGoods({ ...goods, cookies: goods.cookies - 1 });
+  setMessage("Grogu se ha comido una galleta 🍪");
+  return;
+}
 
-      else if (randomNumber === 3 && goods.frogs > 0) {
-      setGoods({ ...goods, frogs: goods.frogs - 1 });
-      setMessage("Grogu se ha comido una rana 🐸");
-      return;
-    }
+if (randomNumber === 3 && goods.frogs > 0) {
+  setGoods({ ...goods, frogs: goods.frogs - 1 });
+  setMessage("Grogu se ha comido una rana 🐸");
+  return;
+}
+
 
     // Otros números → Se descarga mercancía (si queda)
     const totalGoods = goods.cookies + goods.eggs + goods.frogs;
@@ -92,6 +93,7 @@ function App() {
       <main className="page">
         
         <Board position={groguPosition} />
+        
 
         <section>
           <button className="dice" onClick={rollDice}>
