@@ -18,8 +18,15 @@ function App() {
   const [message, setMessage] = useState("");
 
   // --- Función para tirar el dado ---
+  
   console.log ("Holis")
   const rollDice = () => {
+    // Si el juego ya terminó, no permitir más tiradas
+    if (statusGame !== "Game in progress") {
+      setMessage("El juego ya terminó");
+      return;
+    }
+
     const randomNumber = Math.floor(Math.random() * 4) + 1;
     setDiceNumber(randomNumber);
     console.log(randomNumber)
@@ -29,8 +36,10 @@ function App() {
       const newPosition = groguPosition + 1;
       setGroguPosition(newPosition);
 
-      if (newPosition >= 6) {
+      if (newPosition >= 7) {
         setStatusGame("Grogu ha ganado 🎉");
+        setMessage("Grogu avanza y gana el juego 🎉");
+        return;
       }
 
       setMessage("Grogu avanza una casilla");
@@ -39,20 +48,38 @@ function App() {
 
     // Número 1 → Quita un huevo si quedan
     if (randomNumber === 1 && goods.eggs > 0) {
-      setGoods({ ...goods, eggs: goods.eggs - 1 });
+      const newGoods = { ...goods, eggs: goods.eggs - 1 };
+      setGoods(newGoods);
+      const totalAfter = newGoods.cookies + newGoods.eggs + newGoods.frogs;
       setMessage("Grogu se ha comido un huevo 🥚");
+
+      if (totalAfter === 0) {
+        setStatusGame("No quedan mercancías - Fin del juego");
+      }
       return;
     }
 
     else if(randomNumber === 2 && goods.cookies > 0) {
-      setGoods({ ...goods, cookies: goods.cookies - 1 });
+      const newGoods = { ...goods, cookies: goods.cookies - 1 };
+      setGoods(newGoods);
+      const totalAfter = newGoods.cookies + newGoods.eggs + newGoods.frogs;
       setMessage("Grogu se ha comido una galleta 🍪");
+
+      if (totalAfter === 0) {
+        setStatusGame("No quedan mercancías - Fin del juego");
+      }
       return;
     }
 
-      else if (randomNumber === 3 && goods.frogs > 0) {
-      setGoods({ ...goods, frogs: goods.frogs - 1 });
+    else if (randomNumber === 3 && goods.frogs > 0) {
+      const newGoods = { ...goods, frogs: goods.frogs - 1 };
+      setGoods(newGoods);
+      const totalAfter = newGoods.cookies + newGoods.eggs + newGoods.frogs;
       setMessage("Grogu se ha comido una rana 🐸");
+
+      if (totalAfter === 0) {
+        setStatusGame("No quedan mercancías - Fin del juego");
+      }
       return;
     }
 
@@ -61,19 +88,32 @@ function App() {
 
     if (totalGoods === 0) {
       setMessage("No hay más mercancías que descargar");
+      setStatusGame("No quedan mercancías - Fin del juego");
       return;
     }
 
     // Orden de descarga: cookies → eggs → frogs
     if (goods.cookies > 0) {
-      setGoods({ ...goods, cookies: goods.cookies - 1 });
+      const newGoods = { ...goods, cookies: goods.cookies - 1 };
+      setGoods(newGoods);
       setMessage("Se ha descargado una cookie 🍪");
+      if (newGoods.cookies + newGoods.eggs + newGoods.frogs === 0) {
+        setStatusGame("No quedan mercancías - Fin del juego");
+      }
     } else if (goods.eggs > 0) {
-      setGoods({ ...goods, eggs: goods.eggs - 1 });
+      const newGoods = { ...goods, eggs: goods.eggs - 1 };
+      setGoods(newGoods);
       setMessage("Se ha descargado un huevo 🥚");
+      if (newGoods.cookies + newGoods.eggs + newGoods.frogs === 0) {
+        setStatusGame("No quedan mercancías - Fin del juego");
+      }
     } else if (goods.frogs > 0) {
-      setGoods({ ...goods, frogs: goods.frogs - 1 });
+      const newGoods = { ...goods, frogs: goods.frogs - 1 };
+      setGoods(newGoods);
       setMessage("Se ha descargado una rana 🐸");
+      if (newGoods.cookies + newGoods.eggs + newGoods.frogs === 0) {
+        setStatusGame("No quedan mercancías - Fin del juego");
+      }
     }
   };
 
